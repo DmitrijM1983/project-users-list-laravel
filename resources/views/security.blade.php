@@ -23,10 +23,10 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="page_login.html">Войти</a>
+                    <a class="nav-link" href="/users">Назад</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Выйти</a>
+                    <a class="nav-link" href="/logout">Выйти</a>
                 </li>
             </ul>
         </div>
@@ -36,9 +36,12 @@
             <h1 class="subheader-title">
                 <i class='subheader-icon fal fa-lock'></i> Безопасность
             </h1>
-
         </div>
-        <form action="">
+        @foreach($errors->all() as $error)
+            {{$error}} <br>
+        @endforeach
+        <form action="/security/{{$user->value('id')}}" method="post">
+            {{csrf_field()}}
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -50,24 +53,24 @@
                                 <!-- email -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Email</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="john@example.com">
+                                    <input name="email" type="text" id="simpleinput" class="form-control" value="{{$user->value('email')}}">
                                 </div>
 
                                 <!-- password -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Пароль</label>
-                                    <input type="password" id="simpleinput" class="form-control">
+                                    <input name="password" type="password" id="simpleinput" class="form-control">
                                 </div>
 
                                 <!-- password confirmation-->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Подтверждение пароля</label>
-                                    <input type="password" id="simpleinput" class="form-control">
+                                    <input name="password_confirmation" type="password" id="simpleinput" class="form-control">
                                 </div>
 
 
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Изменить</button>
+                                    <button type="submit" class="btn btn-warning">Изменить</button>
                                 </div>
                             </div>
                         </div>

@@ -23,10 +23,10 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="page_login.html">Войти</a>
+                    <a class="nav-link" href="/users">Назад</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Выйти</a>
+                    <a class="nav-link" href="/logout">Выйти</a>
                 </li>
             </ul>
         </div>
@@ -36,9 +36,12 @@
             <h1 class="subheader-title">
                 <i class='subheader-icon fal fa-plus-circle'></i> Редактировать
             </h1>
-
         </div>
-        <form action="">
+        @foreach($errors->all() as $error)
+            {{$error}} <br>
+        @endforeach
+        <form action="/edit/{{$user->value('id')}}" method="post">
+            {{csrf_field()}}
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -50,28 +53,28 @@
                                 <!-- username -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Имя</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Иван иванов">
+                                    <input name="username" type="text" id="simpleinput" class="form-control" value="{{$user->value('username') ?? ''}}">
                                 </div>
 
                                 <!-- title -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Место работы</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Marlin Веб-разработчик">
+                                    <input name="job_title" type="text" id="simpleinput" class="form-control" value="{{$user->value('job_title') ?? ''}}">
                                 </div>
 
                                 <!-- tel -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Номер телефона</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="8 888 8888 88">
+                                    <input name="phone" type="text" id="simpleinput" class="form-control" value="{{$user->value('phone') ?? ''}}">
                                 </div>
 
                                 <!-- address -->
                                 <div class="form-group">
                                     <label class="form-label" for="simpleinput">Адрес</label>
-                                    <input type="text" id="simpleinput" class="form-control" value="Восточные Королевства, Штормград">
+                                    <input name="address" type="text" id="simpleinput" class="form-control" value="{{$user->value('address') ?? ''}}">
                                 </div>
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Редактировать</button>
+                                    <button type="submit" class="btn btn-warning">Редактировать</button>
                                 </div>
                             </div>
                         </div>

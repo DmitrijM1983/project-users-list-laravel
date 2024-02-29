@@ -50,9 +50,9 @@
                                 <h2 class="fs-xxl fw-500 mt-4 text-white text-center">
                                     Регистрация
                                     <small class="h3 fw-300 mt-3 mb-5 text-white opacity-60 hidden-sm-down">
-                                        Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться.
+
                                         <br>
-                                        По своей сути рыбатекст является альтернативой традиционному lorem ipsum
+
 
                                     </small>
                                 </h2>
@@ -62,9 +62,6 @@
                                     @foreach($errors->all() as $error)
                                          {{$error}} <br>
                                     @endforeach
-                                    <div class="alert alert-danger text-dark" role="alert">
-                                        <strong>Уведомление!</strong> Этот эл. адрес уже занят другим пользователем.
-                                    </div>
                                     <form id="js-login" novalidate="" action="/registration" method="post">
                                         {{csrf_field()}}
                                         <div class="form-group">
