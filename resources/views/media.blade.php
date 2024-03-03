@@ -36,9 +36,14 @@
             <h1 class="subheader-title">
                 <i class='subheader-icon fal fa-image'></i> Загрузить аватар
             </h1>
-
         </div>
-        <form action="">
+        @if(!empty($_SESSION['error']))
+            <div class="alert alert-danger">
+                {{$_SESSION['error']}}
+            </div>
+        @endif
+        <form action="/media/{{$id}}" method="post" enctype="multipart/form-data">
+            {{csrf_field()}}
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -48,17 +53,15 @@
                             </div>
                             <div class="panel-content">
                                 <div class="form-group">
-                                    <img src="img/demo/authors/josh.png" alt="" class="img-responsive" width="200">
+                                    <img src="{{$image}}" alt="Not image" class="img-responsive" width="200">
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label" for="example-fileinput">Выберите аватар</label>
-                                    <input type="file" id="example-fileinput" class="form-control-file">
+                                    <input name="image" type="file" id="example-fileinput" class="form-control-file">
                                 </div>
-
-
                                 <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                    <button class="btn btn-warning">Загрузить</button>
+                                    <button type="submit" class="btn btn-warning">Загрузить</button>
                                 </div>
                             </div>
                         </div>

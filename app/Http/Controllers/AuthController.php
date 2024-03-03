@@ -3,23 +3,32 @@
 namespace App\Http\Controllers;
 
 use App\Models\UserModel;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\View\View;
 
 class AuthController extends Controller
 {
-      public function __construct(
-          private readonly UserService $userService,
-          private readonly UserModel   $userModel
-      ) { }
+    public function __construct(
+      private readonly UserService $userService,
+      private readonly UserModel   $userModel
+    ) { }
 
-    public function printRegForm()
+    /**
+     * @return View
+     */
+    public function printRegForm(): View
     {
         return view('page_register');
     }
 
-    public function registration(Request $request)
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function registration(Request $request): RedirectResponse
     {
         $request->validate([
             'email' => 'required|email|max:20|unique:users',
@@ -27,15 +36,24 @@ class AuthController extends Controller
         ]);
 
         $this->userService->registration($request);
+        $_SESSION['email'] = $request->get('email');
+        $_SESSION['success'] = 'Вы успешно зарегистрировались!';
         return Redirect::to('/login');
     }
 
-    public function printLoginForm()
+    /**
+     * @return View
+     */
+    public function printLoginForm(): View
     {
         return view('page_login');
     }
 
-    public function login(Request $request)
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function login(Request $request): RedirectResponse
     {
         $request->validate([
             'email' => 'required|email',
@@ -47,7 +65,33 @@ class AuthController extends Controller
             $checkUser = $this->userModel->checkUser($user->value('password'), $request->get('password'));
         }
         if ($checkUser) {
+            if(isset($_POST['remember'])) {
+                $cookie = $this->userService->getCookie($user->value('id'));
+                if (empty($cookie->all())) {
+                    $cookie = hash('sha256', uniqid());
+                    $this->userService->insertCookie(['user_id' => $user->value('id'), 'hash' => $cookie]);
+                } else {
+                    $cookie = $cookie->value('hash');
+                }
+                setcookie('hash', $cookie, time() + 604800, '/');
+            }
+            $_SESSION['id'] = $user->value('id');
+            $_SESSION['name'] = $user->value('username');
+            $role = $this->userModel->getRole($user->value('email'));
+            $_SESSION['role'] = $role;
             return Redirect::to('/users');
+        } else {
+            $_SESSION['error'] = 'Логин или пароль не верны!';
+            return Redirect::to('/login');
         }
+    }
+
+    /**
+     * @return View
+     */
+    public function logout(): View
+    {
+        $_SESSION = [];
+        return view('start_page');
     }
 }

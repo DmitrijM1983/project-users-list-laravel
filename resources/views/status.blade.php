@@ -1,3 +1,14 @@
+<?php
+
+$arrayStatus =
+    [
+        'Онлайн' => 'online',
+        'Отошел' => 'moved away',
+        'Не беспокоить' => 'do not disturb'
+    ];
+
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -23,10 +34,10 @@
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link" href="page_login.html">Войти</a>
+                    <a class="nav-link" href="/users">Назад</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Выйти</a>
+                    <a class="nav-link" href="/logout">Выйти</a>
                 </li>
             </ul>
         </div>
@@ -38,7 +49,8 @@
             </h1>
 
         </div>
-        <form action="">
+        <form action="/status/{{$id}}" method="post">
+            {{csrf_field()}}
             <div class="row">
                 <div class="col-xl-6">
                     <div id="panel-1" class="panel">
@@ -52,15 +64,26 @@
                                         <!-- status -->
                                         <div class="form-group">
                                             <label class="form-label" for="example-select">Выберите статус</label>
-                                            <select class="form-control" id="example-select">
-                                                <option>Онлайн</option>
-                                                <option>Отошел</option>
-                                                <option>Не беспокоить</option>
+                                            <select name="status" class="form-control" id="example-select">
+                                                @foreach ($arrayStatus as $key=>$value)
+                                                @if ($status != $value)
+                                                @continue
+                                                @else
+                                                <option>{{$key}}</option>
+                                                @endif
+                                                @unset ($arrayStatus[$key])
+                                                @endforeach
+                                                @foreach ($arrayStatus as $key=>$value)
+                                                <option>{{$key}}</option>
+                                                @php unset($arrayStatus[$key]);
+                                                break; @endphp
+                                                @endforeach
+                                                <option>{{array_key_first($arrayStatus)}}</option>
                                             </select>
                                         </div>
                                     </div>
                                     <div class="col-md-12 mt-3 d-flex flex-row-reverse">
-                                        <button class="btn btn-warning">Set Status</button>
+                                        <button type="submit" class="btn btn-warning">Set Status</button>
                                     </div>
                                 </div>
                             </div>
